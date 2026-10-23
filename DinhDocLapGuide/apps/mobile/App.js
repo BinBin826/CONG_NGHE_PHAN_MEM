@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
-  SafeAreaView, View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, StatusBar, Image
+  SafeAreaView, View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, StatusBar, Image, useWindowDimensions, Platform
 } from "react-native";
 import * as Speech from "expo-speech";
 import Svg, {
@@ -165,6 +165,9 @@ export default function App() {
   const startTour = () => { setTab("palace"); setActiveId(stops[0].id); setScreen("detail"); play(stops[0], true); };
 
   const seconds = estimateSeconds(text, lang, rate);
+  const { width: screenW } = useWindowDimensions();
+  const coverW = screenW - 32;           // trừ padding 16 mỗi bên của s.content
+  const coverH = Math.round(coverW * 9 / 16);
   const changeRate = (d) => setRate((r) => Math.round(Math.min(1.4, Math.max(0.6, r + d)) * 10) / 10);
 
   return (
@@ -214,7 +217,7 @@ export default function App() {
       ) : (
         <ScrollView contentContainerStyle={s.content}>
           <TouchableOpacity onPress={() => { stop(); setScreen("list"); }}><Text style={s.back}>← {t(lang, "stops")}</Text></TouchableOpacity>
-          <Image source={imageFor(active.id)} style={s.coverImg} resizeMode="cover" accessibilityLabel={localized(active, "title", lang)} />
+          <Image source={imageFor(active.id)}style={[s.coverImg, { width: coverW, height: coverH }]}resizeMode="cover"accessibilityLabel={localized(active, "title", lang)}/>
           <Text style={s.eyebrow}>{t(lang, "floor")}: {localized(active, "floor", lang)}</Text>
           <Text style={s.title}>{localized(active, "title", lang)}</Text>
           <Text style={s.meta}>{posOf(active)} {t(lang, "of")} {group.length} · ~{formatMinutes(seconds)} {t(lang, "min")}</Text>
@@ -629,7 +632,7 @@ function StopMap({ lang = "vi", active, onSelect, onPlay }) {
 
 const s = StyleSheet.create({
   safe: { flex: 1, backgroundColor: CREAM },
-  header: { backgroundColor: RED, paddingHorizontal: 18, paddingTop: 12, paddingBottom: 12 },
+  header: {backgroundColor: RED,paddingHorizontal: 18,paddingTop: 12 + (Platform.OS === "android" ? StatusBar.currentHeight || 0 : 0),paddingBottom: 12},
   brand: { color: "#fff", fontSize: 19, fontWeight: "800" },
   tagline: { color: "#e8c9c4", fontSize: 10, marginTop: 2 },
   langRow: { gap: 8, paddingTop: 10 },
@@ -644,7 +647,7 @@ const s = StyleSheet.create({
   cta: { backgroundColor: GOLD, borderRadius: 10, paddingVertical: 11, paddingHorizontal: 16, alignSelf: "flex-start", marginTop: 14 },
   ctaText: { color: "#561212", fontWeight: "800" },
   thumb: { width: 56, height: 56, borderRadius: 10, backgroundColor: "#f1e2c4" },
-  coverImg: { width: "100%", aspectRatio: 16 / 9, borderRadius: 14, marginBottom: 14, backgroundColor: "#f1e2c4" },
+  coverImg: { borderRadius: 14, marginBottom: 14, backgroundColor: "#f1e2c4" },
   customMapWrap: { marginTop: 6, gap: 10 },
   webMapHeader: { backgroundColor: "#f6efe0", padding: 10, borderRadius: 10, borderWidth: 1, borderColor: "#e2d5c1" },
   webMapHeaderTitle: { fontSize: 14, fontWeight: "800", color: RED },
