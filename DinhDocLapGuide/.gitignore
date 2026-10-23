@@ -1,0 +1,17 @@
+# Thư viện cài đặt - KHÔNG up lên GitHub (cài lại bằng: npm install)
+node_modules/
+
+# Thư mục sinh tự động
+.expo/
+dist/
+.vite/
+
+# File hệ thống / log / bí mật
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+
+# TẠM THỜI (phần 3 sẽ ghi đè file này và bỏ dòng dưới để đưa package-lock.json lên)
+package-lock.json

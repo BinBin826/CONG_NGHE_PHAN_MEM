@@ -1,0 +1,13 @@
+{
+  "name": "palaceguide-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["apps/web", "apps/mobile", "packages/shared"],
+  "scripts": {
+    "web:dev": "npm --workspace apps/web run dev",
+    "web:build": "npm --workspace apps/web run build",
+    "mobile:start": "npm --workspace apps/mobile run start",
+    "mobile:export": "npm --workspace apps/mobile run export",
+    "test": "npm --workspace apps/web run test"
+  }
+}
