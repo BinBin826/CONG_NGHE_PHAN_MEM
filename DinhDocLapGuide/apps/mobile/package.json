@@ -1,0 +1,19 @@
+{
+  "name": "@palaceguide/mobile",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "export": "expo export --platform android --platform ios"
+  },
+  "dependencies": {
+    "@palaceguide/shared": "1.0.0",
+    "expo": "^58.0.0",
+    "expo-speech": "~58.0.3",
+    "expo-splash-screen": "~58.0.11",
+    "expo-status-bar": "~58.0.4",
+    "react": "19.3.0",
+    "react-native": "0.88.0"
+  }
+}
