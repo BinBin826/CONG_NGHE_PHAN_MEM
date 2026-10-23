@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main, develop]
 
+defaults:
+  run:
+    working-directory: DinhDocLapGuide
+
 jobs:
   build-test:
     runs-on: ubuntu-latest
@@ -16,6 +20,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: DinhDocLapGuide/package-lock.json
 
       # Dùng npm install (không dùng npm ci) vì lockfile tạo trên Windows
       # có thể thiếu các gói native cho Linux (esbuild, rollup).
@@ -35,4 +40,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: web-dist
-          path: apps/web/dist
+          path: DinhDocLapGuide/apps/web/dist
