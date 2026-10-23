@@ -37,6 +37,7 @@ DinhDocLapGuide/
 Yêu cầu Node.js 20+. Chạy tại thư mục gốc:
 
 ```bash
+cd DinhDocLapGuide
 npm install
 npm run web:dev        # http://localhost:5173
 npm run mobile:start   # quét QR bằng Expo Go
