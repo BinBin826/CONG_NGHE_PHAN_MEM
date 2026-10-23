@@ -61,13 +61,12 @@ describe("Thuyết minh Dinh Độc Lập (web)", () => {
     expect(speak.mock.calls[0][0].text).toContain("1863");
   });
 
-  it("hiện ảnh minh họa và bản đồ, có liên kết chỉ đường cho địa danh lân cận", () => {
+    it("hiện ảnh minh họa và bản đồ cho điểm trong Dinh, chỉ hiện ghi chú cho địa danh lân cận", () => {
     render(<App />);
     expect(screen.getByRole("img", { name: "Cổng chính & xe tăng" })).toBeInTheDocument();
     expect(screen.getByTestId("map")).toHaveAttribute("data-active", "gate");
-    expect(screen.queryByText(/Chỉ đường đi bộ/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("tab", { name: "Địa danh lân cận" }));
-    expect(screen.getByTestId("map")).toHaveAttribute("data-active", "notredame");
-    expect(screen.getByText(/Chỉ đường đi bộ từ Dinh/).closest("a")).toHaveAttribute("href", expect.stringContaining("travelmode=walking"));
+    expect(screen.queryByTestId("map")).not.toBeInTheDocument();
+    expect(screen.getByRole("note")).toBeInTheDocument();
   });
 });
