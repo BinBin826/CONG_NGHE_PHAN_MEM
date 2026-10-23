@@ -12,6 +12,3 @@ Thumbs.db
 *.log
 .env
 .env.*
-
-# TẠM THỜI (phần 3 sẽ ghi đè file này và bỏ dòng dưới để đưa package-lock.json lên)
-package-lock.json
