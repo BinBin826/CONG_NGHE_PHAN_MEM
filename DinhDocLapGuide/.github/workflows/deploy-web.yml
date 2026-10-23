@@ -1,8 +1,13 @@
+# CD: tự động đưa bản Web lên GitHub Pages mỗi khi push vào main.
+# Bật trước: Settings → Pages → Source = "GitHub Actions".
 name: Deploy Web
 
 on:
   push:
     branches: [main]
+    paths:
+      - "DinhDocLapGuide/**"
+      - ".github/workflows/deploy-web.yml"
   workflow_dispatch:
 
 permissions:
@@ -13,6 +18,10 @@ permissions:
 concurrency:
   group: pages
   cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: DinhDocLapGuide
 
 jobs:
   deploy:
@@ -26,6 +35,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: DinhDocLapGuide/package-lock.json
       - run: npm install
       - run: npm test
       - name: Build Web
@@ -34,6 +44,6 @@ jobs:
           VITE_BASE: /${{ github.event.repository.name }}/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: apps/web/dist
+          path: DinhDocLapGuide/apps/web/dist
       - id: deployment
         uses: actions/deploy-pages@v4
