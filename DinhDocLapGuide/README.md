@@ -10,7 +10,6 @@ Chưa có backend: thuyết minh được **đọc bằng giọng nói của thi
 
 - Chọn ngôn ngữ (tự đoán theo ngôn ngữ thiết bị, web nhớ lựa chọn trong localStorage).
 - 15 điểm tham quan trong Dinh, mỗi điểm có mô tả ngắn và bài thuyết minh đầy đủ 5 ngôn ngữ: cổng chính & xe tăng, lịch sử Dinh, kiến trúc Ngô Viết Thụ, Phòng Quốc thư, Phòng khánh tiết, Phòng tiếp khách của Tổng thống, Phòng họp Nội các, Phòng làm việc, khu sinh hoạt & phòng chiếu phim, sân thượng, hầm chỉ huy, khu vườn & máy bay F-5E, xe Jeep & Mercedes, nhà trưng bày, Hội trường Thống Nhất.
-
 - Nghe / tạm dừng / dừng, điểm trước – điểm sau, chỉnh tốc độ đọc, hiển thị văn bản thuyết minh.
 - "Bắt đầu tham quan": tự phát lần lượt các điểm.
 - **Hình minh họa** cho cả 15 điểm (tự vẽ vector, không dùng ảnh có bản quyền) trong `packages/shared/images/`.
@@ -40,6 +39,7 @@ cd DinhDocLapGuide
 npm install
 npm run web:dev        # http://localhost:5173
 npm run mobile:start   # quét QR bằng Expo Go
+npm run dashboard:dev  # 
 npm test               # test shared + web
 npm run web:build
 ```
