@@ -1,47 +1,13 @@
-<!DOCTYPE html>
-<html lang="vi" class="h-full bg-[#faf6ee]">
-<head>
+<!doctype html>
+<html lang="vi">
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#7b1f20" />
-    <title>Quản trị Thuyết minh - Dinh Độc Lập</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <!-- Chart.js for Analytics -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            800: '#7b1f20', // Đỏ đô Dinh Độc Lập (--red từ file zip)
-                            900: '#561212', // Đỏ đậm (--red-d từ file zip)
-                            gold: '#c9a24a', // Vàng đồng (--gold từ file zip)
-                            goldlight: '#f3e7cf',
-                            paper: '#faf6ee', // Nền giấy kem ấm (--paper / --cream từ file zip)
-                            ink: '#2a1d1a', // Chữ nâu đậm (--ink từ file zip)
-                            muted: '#7d6e66', // Chữ phụ (--mut từ file zip)
-                            line: '#e4d9c6' // Viền ấm (--line từ file zip)
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', '"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-<body class="h-full font-sans text-[#2a1d1a] bg-[#faf6ee] overflow-hidden">
-    <div id="root" class="h-full w-full"></div>
-    <script type="module" src="/src/main.jsx"></script>
-</body>
+    <meta name="theme-color" content="#7a1f1f" />
+    <title>Quản trị · Dinh Độc Lập Guide</title>
+  </head>
+  <body>
+    <div id="admin-root"></div>
+    <script type="module" src="/src/Admin.jsx"></script>
+  </body>
 </html>
