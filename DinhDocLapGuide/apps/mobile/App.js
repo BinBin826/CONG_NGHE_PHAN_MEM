@@ -118,14 +118,13 @@ export default function App() {
   const [lang, setLang] = useState(deviceLang);
   const [activeId, setActiveId] = useState(stops[0].id);
   const [screen, setScreen] = useState("list"); // list | detail
-  const [tab, setTab] = useState("palace");
   const [query, setQuery] = useState("");
   const [rate, setRate] = useState(1);
   const [playing, setPlaying] = useState(false);
   const token = useRef(0);
 
   const active = stops.find((s) => s.id === activeId);
-  const list = useMemo(() => searchStops(query, lang, tab), [query, lang, tab]);
+  const list = useMemo(() => searchStops(query, lang), [query, lang]);
   const group = stopsByCategory(active.category);
   const posOf = (st) => stopsByCategory(st.category).findIndex((x) => x.id === st.id) + 1;
   const text = localized(active, "text", lang);
@@ -161,9 +160,7 @@ export default function App() {
     setActiveId(n.id);
     if (was) play(n); else stop();
   };
-  const switchTab = (c) => { setTab(c); setQuery(""); };
-  const startTour = () => { setTab("palace"); setActiveId(stops[0].id); setScreen("detail"); play(stops[0], true); };
-
+  const startTour = () => { setActiveId(stops[0].id); setScreen("detail"); play(stops[0], true); };
   const seconds = estimateSeconds(text, lang, rate);
   const { width: screenW } = useWindowDimensions();
   const coverW = screenW - 32;           // trừ padding 16 mỗi bên của s.content
@@ -192,13 +189,6 @@ export default function App() {
             <Text style={s.heroText}>{t(lang, "heroText")}</Text>
             <TouchableOpacity style={s.cta} onPress={startTour}><Text style={s.ctaText}>{t(lang, "startTour")} →</Text></TouchableOpacity>
           </View>
-          <View style={s.tabs}>
-            {["palace", "nearby"].map((c) => (
-              <TouchableOpacity key={c} onPress={() => switchTab(c)} style={[s.tab, tab === c && s.tabOn]} accessibilityRole="tab" accessibilityState={{ selected: tab === c }}>
-                <Text style={[s.tabText, tab === c && s.tabTextOn]}>{t(lang, c === "palace" ? "tabPalace" : "tabNearby")}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
           <TextInput value={query} onChangeText={setQuery} placeholder={t(lang, "search")} placeholderTextColor="#a89a90" style={s.search} />
           {list.length === 0 && <Text style={s.empty}>{t(lang, "empty")}</Text>}
           {list.map((st) => (
@@ -211,7 +201,6 @@ export default function App() {
               </View>
             </TouchableOpacity>
           ))}
-          {tab === "nearby" && <Text style={s.footer}>{t(lang, "nearbyNote")}</Text>}
           <Text style={s.footer}>{t(lang, "footer")}</Text>
         </ScrollView>
       ) : (
@@ -224,29 +213,8 @@ export default function App() {
           <Text style={s.summary}>{localized(active, "summary", lang)}</Text>
           <Text style={s.h3}>{t(lang, "transcript")}</Text>
           <Text style={s.transcript}>{text}</Text>
-          {active.category === "palace" ? (
-            <>
-              <Text style={[s.h3, { marginTop: 22 }]}>{t(lang, "map")}</Text>
-              <StopMap
-                lang={lang}
-                active={active}
-                onSelect={(id) => {
-                  const st = stops.find((x) => x.id === id);
-                  if (st) {
-                    stop();
-                    setTab(st.category);
-                    setActiveId(id);
-                  }
-                }}
-                onPlay={(st) => play(st, false)}
-              />
-            </>
-          ) : (
-            <View style={s.nearbyMapNote}>
-              <Text style={s.nearbyMapNoteTitle}>📍 {t(lang, "tabNearby")}</Text>
-              <Text style={s.nearbyMapNoteText}>{lang === "en" ? "The interactive map is limited to the Palace grounds and its floors. Nearby landmarks are kept separate." : lang === "zh" ? "交互地图仅显示独立宫的庭院和楼层，附近地标单独显示。" : lang === "ja" ? "インタラクティブマップは統一会堂の敷地と各階のみを表示し、周辺スポットは分けています。" : lang === "ko" ? "대화형 지도는 통일궁 경내와 각 층만 표시하며, 주변 명소는 별도로 구분합니다." : "Bản đồ tương tác chỉ hiển thị khuôn viên và từng tầng của Dinh Độc Lập; địa điểm lân cận được tách riêng."}</Text>
-            </View>
-          )}
+         <Text style={[s.h3, { marginTop: 22 }]}>{t(lang, "map")}</Text>
+         <StopMap lang={lang} active={active} onSelect={(id) => { stop(); setActiveId(id); }} onPlay={(st) => play(st, false)}/>
         </ScrollView>
       )}
 
@@ -677,11 +645,6 @@ const s = StyleSheet.create({
   spotSecondaryBtn: { backgroundColor: "#e9e1ce", borderRadius: 8, paddingVertical: 6, paddingHorizontal: 12 },
   spotSecondaryBtnText: { color: "#2b3a30", fontSize: 12, fontWeight: "700" },
   spotPopupTranscript: { fontSize: 14, lineHeight: 21, color: "#2a1d1a", marginTop: 4 },
-  tabs: { flexDirection: "row", gap: 8, marginBottom: 10 },
-  tab: { flex: 1, borderWidth: 1, borderColor: "#e8dfd0", backgroundColor: "#fff", borderRadius: 10, paddingVertical: 9, alignItems: "center" },
-  tabOn: { backgroundColor: RED, borderColor: RED },
-  tabText: { fontSize: 12, fontWeight: "700", color: "#2a1d1a" },
-  tabTextOn: { color: "#fff" },
   summary: { fontSize: 14, color: "#7d6e66", marginBottom: 14 },
   search: { backgroundColor: "#fff", borderWidth: 1, borderColor: "#e8dfd0", borderRadius: 10, paddingHorizontal: 14, paddingVertical: 11, marginBottom: 10 },
   empty: { color: "#7d6e66", marginVertical: 12 },

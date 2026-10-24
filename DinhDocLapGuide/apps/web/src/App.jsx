@@ -19,14 +19,13 @@ const readLang = () => {
 export default function App() {
   const [lang, setLang] = useState(readLang);
   const [activeId, setActiveId] = useState(stops[0].id);
-  const [tab, setTab] = useState("palace");
   const [query, setQuery] = useState("");
   const [rate, setRate] = useState(1);
   const [autoNext, setAutoNext] = useState(false);
   const speech = useSpeech();
 
   const active = stops.find((s) => s.id === activeId);
-  const list = useMemo(() => searchStops(query, lang, tab), [query, lang, tab]);
+  const list = useMemo(() => searchStops(query, lang), [query, lang]);
   const group = stopsByCategory(active.category);
   const posOf = (s) => stopsByCategory(s.category).findIndex((x) => x.id === s.id) + 1;
   const text = localized(active, "text", lang);
@@ -50,7 +49,6 @@ export default function App() {
   const select = (id, fromMap = false) => {
     speech.stop();
     setActiveId(id);
-    if (fromMap) { const s = stops.find((x) => x.id === id); if (s) { setTab(s.category); setQuery(""); } }
   };
   const go = (dir) => {
     const n = getNextStop(activeId, dir);
@@ -59,8 +57,7 @@ export default function App() {
     setActiveId(n.id);
     if (wasPlaying) play(n, { chain: autoNext }); else speech.stop();
   };
-  const switchTab = (c) => { speech.stop(); setTab(c); setQuery(""); setActiveId(stopsByCategory(c)[0].id); };
-  const startTour = () => { setTab("palace"); setActiveId(stops[0].id); setAutoNext(true); play(stops[0], { chain: true }); };
+  const startTour = () => { setActiveId(stops[0].id); setAutoNext(true); play(stops[0], { chain: true }); };
 
   const mainAction = () => {
     if (speech.status === "playing") speech.pause();
@@ -102,13 +99,6 @@ export default function App() {
             <h2>{t(lang, "stops")}</h2>
             <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t(lang, "search")} aria-label={t(lang, "search")} />
           </div>
-          <div className="tabs" role="tablist">
-            {["palace", "nearby"].map((c) => (
-              <button key={c} role="tab" aria-selected={tab === c} className={`tab ${tab === c ? "on" : ""}`} onClick={() => switchTab(c)}>
-                {t(lang, c === "palace" ? "tabPalace" : "tabNearby")}
-              </button>
-            ))}
-          </div>
           <ol>
             {list.map((s) => (
               <li key={s.id}>
@@ -121,7 +111,6 @@ export default function App() {
             ))}
           </ol>
           {list.length === 0 && <p className="empty">{t(lang, "empty")}</p>}
-          {tab === "nearby" && <p className="empty">{t(lang, "nearbyNote")}</p>}
         </aside>
 
         <article className="detail">
@@ -136,17 +125,8 @@ export default function App() {
           <p className="summary">{localized(active, "summary", lang)}</p>
           <h3>{t(lang, "transcript")}</h3>
           <p className="transcript" lang={lang}>{text}</p>
-          {active.category === "palace" ? (
-            <>
-              <h3 className="map-h">{t(lang, "map")}</h3>
-              <MapView lang={lang} activeId={activeId} onSelect={(id) => select(id, true)} onPlay={(st) => play(st, { chain: autoNext })} />
-            </>
-          ) : (
-            <div className="nearby-map-note" role="note">
-              <strong>📍 {t(lang, "tabNearby")}</strong>
-              <p>{lang === "en" ? "The interactive floor and grounds maps are limited to Independence Palace. Nearby landmarks are intentionally kept separate so they do not appear inside the Palace map." : lang === "zh" ? "交互地图仅显示独立宫的庭院和楼层。附近地标单独显示，不会混入宫殿地图。" : lang === "ja" ? "インタラクティブマップは統一会堂の敷地と各階のみを表示します。周辺スポットは宮殿の地図に混在しないよう分けています。" : lang === "ko" ? "대화형 지도는 통일궁 경내와 각 층만 표시합니다. 주변 명소는 궁전 지도에 섞이지 않도록 별도로 구분했습니다." : "Bản đồ tương tác chỉ hiển thị khuôn viên và từng tầng bên trong Dinh Độc Lập. Các địa điểm lân cận được tách riêng, không trộn vào sơ đồ Dinh."}</p>
-            </div>
-          )}
+         <h3 className="map-h">{t(lang, "map")}</h3>
+         <MapView lang={lang} activeId={activeId} onSelect={(id) => select(id)} onPlay={(st) => play(st, { chain: autoNext })} />
         </article>
       </main>
 

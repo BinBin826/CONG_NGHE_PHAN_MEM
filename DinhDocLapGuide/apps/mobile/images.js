@@ -15,11 +15,6 @@ export const images = {
   garden: require("@palaceguide/shared/images/garden.png"),
   vehicles: require("@palaceguide/shared/images/vehicles.png"),
   exhibition: require("@palaceguide/shared/images/exhibition.png"),
-  notredame: require("@palaceguide/shared/images/notredame.png"),
-  post: require("@palaceguide/shared/images/post.png"),
-  gialong: require("@palaceguide/shared/images/gialong.png"),
-  warmuseum: require("@palaceguide/shared/images/warmuseum.png"),
-  benthanh: require("@palaceguide/shared/images/benthanh.png"),
 };
 
 export const imageFor = (id) => images[id] || null;

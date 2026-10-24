@@ -10,14 +10,14 @@ export const LANGUAGES = [
   { code: "ko", label: "한국어", native: "한국어", flag: "🇰🇷", speech: "ko-KR" }
 ];
 
-import { summaries, palaceMore, nearby } from "./places.js";
+import { summaries, palaceMore } from "./places.js";
 
 export const DEFAULT_LANG = "vi";
 
 export const ui = {
   vi: {
     map: "Bản đồ", openMaps: "Mở Google Maps", walkFromPalace: "Chỉ đường đi bộ từ Dinh", mapNote: "Vị trí chỉ mang tính ước lượng.", palaceName: "Dinh Độc Lập", palaceAddress: "135 Nam Kỳ Khởi Nghĩa",
-    tabPalace: "Trong Dinh", tabNearby: "Địa danh lân cận", nearbyNote: "Khoảng cách chỉ là ước lượng đi bộ.", about: "Giới thiệu",
+    about: "Giới thiệu",
     appName: "Thuyết minh Dinh Độc Lập",
     tagline: "Hội trường Thống Nhất · 135 Nam Kỳ Khởi Nghĩa, TP. Hồ Chí Minh",
     heroTitle: "Nghe câu chuyện của Dinh Độc Lập",
@@ -30,7 +30,7 @@ export const ui = {
   },
   en: {
     map: "Map", openMaps: "Open in Google Maps", walkFromPalace: "Walking directions from the Palace", mapNote: "Locations are approximate.", palaceName: "Independence Palace", palaceAddress: "135 Nam Ky Khoi Nghia",
-    tabPalace: "Inside the Palace", tabNearby: "Nearby landmarks", nearbyNote: "Distances are rough walking estimates.", about: "About",
+    about: "About",
     appName: "Independence Palace Audio Guide",
     tagline: "Reunification Palace · 135 Nam Ky Khoi Nghia, Ho Chi Minh City",
     heroTitle: "Hear the story of Independence Palace",
@@ -43,7 +43,7 @@ export const ui = {
   },
   zh: {
     map: "地图", openMaps: "在谷歌地图中打开", walkFromPalace: "从独立宫步行路线", mapNote: "位置仅为大致范围。", palaceName: "独立宫", palaceAddress: "南圻起义路135号",
-    tabPalace: "宫内景点", tabNearby: "周边地标", nearbyNote: "距离为步行估算。", about: "简介",
+    about: "简介",
     appName: "独立宫语音导览",
     tagline: "统一宫 · 胡志明市南圻起义路135号",
     heroTitle: "聆听独立宫的故事",
@@ -56,7 +56,7 @@ export const ui = {
   },
   ja: {
     map: "地図", openMaps: "Googleマップで開く", walkFromPalace: "独立宮殿からの徒歩ルート", mapNote: "位置はおおよそのものです。", palaceName: "独立宮殿", palaceAddress: "ナムキーコイギア通り135番地",
-    tabPalace: "宮殿内", tabNearby: "周辺のスポット", nearbyNote: "距離は徒歩のおおよその目安です。", about: "概要",
+    about: "概要",
     appName: "独立宮殿 音声ガイド",
     tagline: "統一会堂 · ホーチミン市 ナムキーコイギア通り135番地",
     heroTitle: "独立宮殿の物語を聞こう",
@@ -69,7 +69,7 @@ export const ui = {
   },
   ko: {
     map: "지도", openMaps: "구글 지도에서 열기", walkFromPalace: "독립궁에서 도보 길찾기", mapNote: "위치는 대략적인 것입니다.", palaceName: "독립궁", palaceAddress: "남끼코이응이아 135번지",
-    tabPalace: "궁 내부", tabNearby: "주변 명소", nearbyNote: "거리는 도보 기준 대략적인 추정입니다.", about: "소개",
+    about: "소개",
     appName: "독립궁 오디오 가이드",
     tagline: "통일궁 · 호찌민시 남끼코이응이아 135번지",
     heroTitle: "독립궁의 이야기를 들어보세요",
@@ -183,46 +183,17 @@ const palaceCore = [
 ];
 
 
-const byId = Object.fromEntries([...palaceCore, ...palaceMore, ...nearby].map((x) => [x.id, x]));
+const byId = Object.fromEntries([...palaceCore, ...palaceMore].map((x) => [x.id, x]));
 const TOUR_ORDER = [
   "gate", "history", "architecture", "credentials", "reception", "presidentRoom", "cabinet", "office",
-  "family", "rooftop", "bunker", "garden", "vehicles", "exhibition", "reunification",
-  "notredame", "post", "gialong", "warmuseum", "benthanh"
+  "family", "rooftop", "bunker", "garden", "vehicles", "exhibition", "reunification"
 ];
-
-export const CATEGORIES = ["palace", "nearby"];
 
 // Danh sách đầy đủ, đã gắn mô tả ngắn và số thứ tự (order liên tục từ 1)
 export const stops = TOUR_ORDER.map((id, i) => {
   const stop = byId[id];
   return { ...stop, order: i + 1, summary: stop.summary || summaries[id] };
 });
-
-
-// ---- Vị trí (ước lượng, WGS84) ----
-export const PALACE_COORDS = { lat: 10.7769, lng: 106.6953 };
-const NEARBY_COORDS = {
-  notredame: { lat: 10.77985, lng: 106.69905 },
-  post: { lat: 10.77995, lng: 106.70005 },
-  gialong: { lat: 10.77602, lng: 106.70018 },
-  warmuseum: { lat: 10.77947, lng: 106.69204 },
-  benthanh: { lat: 10.7725, lng: 106.698 }
-};
-
-// Các điểm trong Dinh dùng toạ độ của Dinh; địa danh lân cận có toạ độ riêng
-export const getCoords = (stop) => NEARBY_COORDS[stop.id] || PALACE_COORDS;
-export const mapPoints = () => [
-  { id: "__palace", kind: "palace", ...PALACE_COORDS },
-  ...Object.entries(NEARBY_COORDS).map(([id, c]) => ({ id, kind: "nearby", ...c }))
-];
-export const mapsUrl = (stop) => {
-  const c = getCoords(stop);
-  return `https://www.google.com/maps/search/?api=1&query=${c.lat},${c.lng}`;
-};
-export const walkingUrl = (stop) => {
-  const c = getCoords(stop);
-  return `https://www.google.com/maps/dir/?api=1&origin=${PALACE_COORDS.lat},${PALACE_COORDS.lng}&destination=${c.lat},${c.lng}&travelmode=walking`;
-};
 
 // ---- Helpers ----
 export const isSupportedLang = (code) => LANGUAGES.some((l) => l.code === code);

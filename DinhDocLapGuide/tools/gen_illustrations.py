@@ -181,60 +181,13 @@ def scene_exhibition():
     frames = "".join(f'<rect x="{90 + i*210}" y="90" width="150" height="100" fill="#222" stroke="{GOLD}" stroke-width="6"/><rect x="{102 + i*210}" y="102" width="126" height="76" fill="#8aa5b0"/>' for i in range(3))
     return svg(bg + frames + cases + items)
 
-
-def scene_notredame():
-    sk = sky("#8fc6e6", "#f5e6c6", "#7aa36a", 340)
-    tw = lambda x: (f'<rect x="{x}" y="120" width="86" height="220" fill="#b5502d"/><rect x="{x}" y="120" width="86" height="12" fill="#8c3a1e"/>'
-                    f'<polygon points="{x},120 {x+43},40 {x+86},120" fill="#a14424"/><rect x="{x+31}" y="170" width="24" height="60" rx="12" fill="#6e2a14"/>'
-                    f'<rect x="{x+31}" y="150" width="24" height="3" fill="#6e2a14"/>')
-    nave = f'<rect x="270" y="210" width="260" height="130" fill="#c15a35"/>' + f'<path d="M370 340 v-60 a30 30 0 0 1 60 0 v60 z" fill="#6e2a14"/><circle cx="400" cy="240" r="16" fill="#e6c27a"/>'
-    return svg(sk + nave + tw(262) + tw(452) + tree(90, 350, 1.2) + tree(720, 350, 1.2) + '<rect y="340" width="800" height="14" fill="#d9cfbb"/>')
-
-
-def scene_post():
-    sk = sky("#9ccbe6", "#f6e8c8", "#c8bda5", 345)
-    arches = "".join(f'<path d="M{150 + i*100} 340 v-90 a30 30 0 0 1 60 0 v90 z" fill="#2f5f6f"/>' for i in range(6))
-    return svg(sk + '<rect x="110" y="150" width="580" height="195" fill="#f0d98a"/><rect x="110" y="140" width="580" height="14" fill="#c79d3a"/>'
-               + '<polygon points="110,150 400,70 690,150" fill="#e6c76a" stroke="#c79d3a" stroke-width="4"/>'
-               + '<circle cx="400" cy="128" r="30" fill="#fff" stroke="#555" stroke-width="5"/><line x1="400" y1="128" x2="400" y2="106" stroke="#222" stroke-width="3"/><line x1="400" y1="128" x2="416" y2="134" stroke="#222" stroke-width="3"/>'
-               + arches + tree(60, 350, 1.2) + tree(745, 350, 1.2))
-
-
-def scene_gialong():
-    sk = sky("#9fd0e8", "#f7ead0", "#7aa36a", 340)
-    cols = "".join(f'<rect x="{200 + i*60}" y="190" width="22" height="150" fill="#fbf6ea"/>' for i in range(8))
-    return svg(sk + '<rect x="160" y="180" width="480" height="14" fill="#e8dcc0"/><polygon points="160,180 400,100 640,180" fill="#e8dcc0" stroke="#c9b98f" stroke-width="3"/>'
-               + '<rect x="160" y="190" width="480" height="150" fill="#f3ead4"/>' + cols
-               + '<rect x="370" y="270" width="60" height="70" rx="26" fill="#7a4a2a"/><rect x="150" y="338" width="500" height="12" fill="#d6c8a4"/>'
-               + flag(120, 345, 1.0) + tree(710, 350, 1.3))
-
-
-def scene_warmuseum():
-    sk = sky("#b8d4e0", "#eee6d2", "#8d9a80", 340)
-    tank = ('<g transform="translate(250,346)"><rect x="-80" y="-20" width="160" height="20" rx="10" fill="#4b5d3a"/><rect x="-44" y="-40" width="76" height="22" rx="5" fill="#5b6e45"/>'
-            '<rect x="24" y="-33" width="86" height="6" fill="#3d4c2e"/></g>')
-    return svg(sk + '<rect x="360" y="170" width="340" height="170" fill="#e4e0d6"/><rect x="360" y="160" width="340" height="14" fill="#b9b2a0"/>'
-               + "".join(f'<rect x="{385 + i*52}" y="205" width="30" height="48" fill="#6f8794"/>' for i in range(6))
-               + '<rect x="505" y="285" width="50" height="55" fill="#7a6a55"/>' + tank + flag(730, 345, 1.0) + tree(60, 350, 1.1))
-
-
-def scene_benthanh():
-    sk = sky("#a2d2ea", "#f7e9c8", "#c6bca3", 345)
-    return svg(sk + '<rect x="130" y="210" width="540" height="135" fill="#efe3c3"/><rect x="130" y="200" width="540" height="12" fill="#b78d3d"/>'
-               + '<rect x="350" y="100" width="100" height="112" fill="#efe3c3"/><polygon points="350,100 400,50 450,100" fill="#b78d3d"/>'
-               + '<circle cx="400" cy="135" r="24" fill="#fff" stroke="#555" stroke-width="4"/><line x1="400" y1="135" x2="400" y2="118" stroke="#222" stroke-width="3"/><line x1="400" y1="135" x2="412" y2="140" stroke="#222" stroke-width="3"/>'
-               + "".join(f'<path d="M{160 + i*60} 345 v-70 a22 22 0 0 1 44 0 v70 z" fill="#b5502d"/>' for i in range(9))
-               + "".join(f'<rect x="{150 + i*80}" y="352" width="60" height="14" fill="{c}"/>' for i, c in enumerate(["#d62828", "#f4a261", "#2a9d8f", "#e9c46a", "#8a5a3b", "#264653", "#e76f51"])))
-
-
 SCENES = {
     "gate": scene_gate, "history": scene_palace, "architecture": scene_palace, "reunification": scene_palace,
     "credentials": lambda: hall("credentials"), "reception": lambda: hall("reception"),
     "presidentRoom": lambda: hall("presidentRoom"), "cabinet": lambda: hall("cabinet"),
     "office": lambda: hall("office"), "family": lambda: hall("family"),
     "rooftop": scene_rooftop, "bunker": scene_bunker, "garden": scene_garden, "vehicles": scene_vehicles,
-    "exhibition": scene_exhibition, "notredame": scene_notredame, "post": scene_post,
-    "gialong": scene_gialong, "warmuseum": scene_warmuseum, "benthanh": scene_benthanh,
+    "exhibition": scene_exhibition,
 }
 
 

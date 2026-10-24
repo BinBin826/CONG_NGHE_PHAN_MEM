@@ -1,6 +1,5 @@
 // Địa danh bổ sung và phần mô tả ngắn (summary) cho danh sách.
 // Nguồn đối chiếu: dinhdoclap.gov.vn (bản tiếng Anh) và các trang giới thiệu du lịch.
-// Với địa danh lân cận, khoảng cách là ước lượng đi bộ; hãy kiểm tra lại trước khi phát hành.
 
 const L = (vi, en, zh, ja, ko) => ({ vi, en, zh, ja, ko });
 
@@ -196,104 +195,6 @@ export const palaceMore = [
       "展览馆是院内的独立建筑，以1868年至1966年从诺罗敦宫到独立宫为主题，展出数千件文物。建议预留三十到四十五分钟参观。这里最能帮助您了解建筑的形成和演变。",
       "展示館は敷地内の独立した建物で、1868年から1966年までのノロドム宮殿から独立宮殿への歩みを、数千点の展示品で紹介しています。見学には30〜45分ほどかかります。建物の成り立ちと変遷を理解するのに最適な場所です。",
       "전시관은 경내의 별도 건물로, 1868년부터 1966년까지 노로돔 궁에서 독립궁에 이르는 과정을 수천 점의 유물로 소개합니다. 관람에는 30~45분 정도가 걸립니다. 건물이 만들어지고 변해 온 과정을 이해하기에 가장 좋은 곳입니다."
-    )
-  }
-];
-
-export const nearby = [
-  {
-    id: "notredame", icon: "⛪", category: "nearby",
-    floor: L("Khoảng 10 phút đi bộ", "About a 10-minute walk", "步行约10分钟", "徒歩約10分", "도보 약 10분"),
-    title: L("Nhà thờ Đức Bà Sài Gòn", "Saigon Notre-Dame Basilica", "西贡圣母大教堂", "サイゴン大教会", "사이공 노트르담 대성당"),
-    summary: L(
-      "Nhà thờ gạch đỏ xây từ 1863 đến 1880 với hai tháp chuông.",
-      "Red-brick cathedral built 1863–1880, with two bell towers.",
-      "1863至1880年建成的红砖教堂，有两座钟楼。",
-      "1863〜1880年に建てられた赤レンガの教会。鐘楼が2つあります。",
-      "1863~1880년에 지은 붉은 벽돌 성당, 종탑이 두 개 있습니다."
-    ),
-    text: L(
-      "Vương cung thánh đường Chính tòa Đức Bà Sài Gòn được xây dựng từ năm 1863 đến năm 1880 thời Pháp thuộc. Công trình nổi bật với màu gạch đỏ và hai tháp chuông cao khoảng sáu mươi mét. Đây là biểu tượng kiến trúc của trung tâm thành phố và nằm cách Dinh Độc Lập khoảng mười phút đi bộ.",
-      "The Saigon Notre-Dame Basilica was built between 1863 and 1880 during the French colonial period. It stands out for its red bricks and two bell towers about sixty metres tall. It is an architectural symbol of the city centre, roughly a ten-minute walk from Independence Palace.",
-      "西贡圣母大教堂建于法属时期的1863年至1880年。它以红砖外墙和两座约六十米高的钟楼而闻名，是市中心的建筑标志，距离独立宫步行约十分钟。",
-      "サイゴン大教会は、フランス植民地時代の1863年から1880年にかけて建てられました。赤レンガと、高さ約60メートルの2つの鐘楼が特徴です。市の中心を象徴する建築で、独立宮殿から徒歩約10分です。",
-      "사이공 노트르담 대성당은 프랑스 식민 시기인 1863년부터 1880년 사이에 지어졌습니다. 붉은 벽돌과 높이 약 60미터의 두 종탑이 특징입니다. 도심의 건축적 상징이며 독립궁에서 도보로 약 10분 거리입니다."
-    )
-  },
-  {
-    id: "post", icon: "📮", category: "nearby",
-    floor: L("Cạnh Nhà thờ Đức Bà", "Next to the Basilica", "紧邻圣母大教堂", "大教会のすぐ隣", "대성당 바로 옆"),
-    title: L("Bưu điện Trung tâm Sài Gòn", "Saigon Central Post Office", "西贡中央邮局", "サイゴン中央郵便局", "사이공 중앙우체국"),
-    summary: L(
-      "Tòa nhà thời Pháp xây 1886–1891, vẫn hoạt động đến nay.",
-      "French-era building from 1886–1891, still a working post office.",
-      "1886至1891年的法式建筑，至今仍在营业。",
-      "1886〜1891年のフランス統治時代の建物で、今も営業中。",
-      "1886~1891년의 프랑스풍 건물로 지금도 운영됩니다."
-    ),
-    text: L(
-      "Bưu điện Trung tâm Sài Gòn được xây từ khoảng năm 1886 đến 1891 và do kiến trúc sư Alfred Foulhoux thiết kế. Sảnh lớn có mái vòm cao, bản đồ cổ trên tường, và nơi đây vẫn là một bưu điện đang hoạt động. Bạn có thể gửi một tấm bưu thiếp làm kỷ niệm.",
-      "The Saigon Central Post Office was built from about 1886 to 1891 and designed by architect Alfred Foulhoux. Its great hall has a high vaulted roof and old maps on the walls, and it is still a working post office. You can send a postcard as a souvenir.",
-      "西贡中央邮局建于1886年至1891年前后，由建筑师阿尔弗雷德·富尔乌设计。大厅拱顶高耸，墙上挂着古地图，至今仍是一家正在营业的邮局。您可以寄一张明信片留作纪念。",
-      "サイゴン中央郵便局は1886年から1891年ごろに建てられ、建築家アルフレッド・フールウーが設計しました。大ホールには高いアーチ型の天井と壁の古地図があり、今も現役の郵便局です。記念にはがきを送ってみてはいかがでしょう。",
-      "사이공 중앙우체국은 1886년부터 1891년 무렵에 지어졌고 건축가 알프레드 풀루가 설계했습니다. 큰 홀에는 높은 아치형 천장과 벽의 옛 지도가 있으며, 지금도 운영 중인 우체국입니다. 기념으로 엽서를 보내 보세요."
-    )
-  },
-  {
-    id: "gialong", icon: "🏯", category: "nearby",
-    floor: L("Khoảng 10 phút đi bộ", "About a 10-minute walk", "步行约10分钟", "徒歩約10分", "도보 약 10분"),
-    title: L("Bảo tàng TP. Hồ Chí Minh", "Ho Chi Minh City Museum", "胡志明市博物馆", "ホーチミン市博物館", "호찌민시 박물관"),
-    summary: L(
-      "Từng là Dinh Gia Long, kiến trúc tân cổ điển cuối thế kỷ 19.",
-      "Formerly Gia Long Palace, a late-19th-century neoclassical building.",
-      "前身为嘉隆宫，19世纪末的新古典主义建筑。",
-      "旧ザーロン宮殿。19世紀末の新古典主義建築。",
-      "옛 자롱 궁, 19세기 말의 신고전주의 건축."
-    ),
-    text: L(
-      "Bảo tàng Thành phố Hồ Chí Minh đặt trong tòa nhà từng là Dinh Gia Long, xây khoảng những năm 1885 đến 1890 theo phong cách tân cổ điển. Bảo tàng trưng bày lịch sử, văn hóa và đời sống của Sài Gòn và thành phố qua nhiều thời kỳ. Tòa nhà nằm cách Dinh Độc Lập khoảng mười phút đi bộ.",
-      "The Ho Chi Minh City Museum is housed in the former Gia Long Palace, built around 1885 to 1890 in a neoclassical style. It displays the history, culture and daily life of Saigon and the city across many eras. The building is roughly a ten-minute walk from Independence Palace.",
-      "胡志明市博物馆设在曾经的嘉隆宫内，建于1885年至1890年前后，属新古典主义风格。馆内展示西贡及这座城市在不同时期的历史、文化与生活。该建筑距离独立宫步行约十分钟。",
-      "ホーチミン市博物館は、1885年から1890年ごろに新古典主義様式で建てられた旧ザーロン宮殿にあります。サイゴンと市の歴史、文化、暮らしを時代ごとに紹介しています。独立宮殿から徒歩約10分です。",
-      "호찌민시 박물관은 1885년부터 1890년 무렵 신고전주의 양식으로 지어진 옛 자롱 궁에 자리합니다. 사이공과 도시의 역사, 문화, 생활을 여러 시대에 걸쳐 전시합니다. 독립궁에서 도보로 약 10분 거리입니다."
-    )
-  },
-  {
-    id: "warmuseum", icon: "🕯️", category: "nearby",
-    floor: L("Khoảng 10–15 phút đi bộ", "About a 10–15 minute walk", "步行约10至15分钟", "徒歩約10〜15分", "도보 약 10~15분"),
-    title: L("Bảo tàng Chứng tích Chiến tranh", "War Remnants Museum", "战争遗迹博物馆", "戦争証跡博物館", "전쟁 증적 박물관"),
-    summary: L(
-      "Bảo tàng về chiến tranh Việt Nam, mở cửa từ năm 1975.",
-      "A museum on the Vietnam War, open since 1975.",
-      "关于越南战争的博物馆，1975年起开放。",
-      "ベトナム戦争の博物館。1975年に開館。",
-      "베트남 전쟁을 다루는 박물관, 1975년 개관."
-    ),
-    text: L(
-      "Bảo tàng Chứng tích Chiến tranh mở cửa từ năm 1975 và giới thiệu về chiến tranh Việt Nam qua hình ảnh, tư liệu và hiện vật. Nội dung có thể gây xúc động mạnh, nên cần sự cân nhắc khi đi cùng trẻ nhỏ. Bảo tàng nằm cách Dinh Độc Lập khoảng mười đến mười lăm phút đi bộ.",
-      "The War Remnants Museum has been open since 1975 and presents the Vietnam War through photographs, documents and objects. Some content can be deeply upsetting, so consider this when visiting with young children. It is roughly a ten to fifteen minute walk from Independence Palace.",
-      "战争遗迹博物馆自1975年起开放，通过照片、资料和实物介绍越南战争。部分内容可能令人感到强烈不适，带小孩参观时请酌情考虑。博物馆距离独立宫步行约十到十五分钟。",
-      "戦争証跡博物館は1975年に開館し、写真、資料、実物でベトナム戦争を紹介しています。強い衝撃を受ける展示もあるため、小さなお子様連れの場合はご配慮ください。独立宮殿から徒歩約10〜15分です。",
-      "전쟁 증적 박물관은 1975년에 개관하여 사진, 자료, 유물로 베트남 전쟁을 소개합니다. 충격이 큰 전시도 있으므로 어린이와 함께 방문할 때는 유의하세요. 독립궁에서 도보로 약 10~15분 거리입니다."
-    )
-  },
-  {
-    id: "benthanh", icon: "🛍️", category: "nearby",
-    floor: L("Khoảng 20 phút đi bộ", "About a 20-minute walk", "步行约20分钟", "徒歩約20分", "도보 약 20분"),
-    title: L("Chợ Bến Thành", "Ben Thanh Market", "滨城市场", "ベンタイン市場", "벤탄 시장"),
-    summary: L(
-      "Chợ biểu tượng của thành phố, tòa nhà hiện nay khánh thành 1914.",
-      "The city's iconic market; the current building opened in 1914.",
-      "城市标志性市场，现有建筑于1914年落成。",
-      "市を象徴する市場。現在の建物は1914年に開業。",
-      "도시의 상징적인 시장, 현재 건물은 1914년 개장."
-    ),
-    text: L(
-      "Chợ Bến Thành là một trong những biểu tượng của Thành phố Hồ Chí Minh. Tòa nhà hiện nay được khánh thành năm 1914, nổi bật với tháp đồng hồ ở cổng chính. Chợ bán đồ lưu niệm, vải vóc, đặc sản và có nhiều quầy ăn uống. Từ Dinh Độc Lập bạn có thể đi bộ khoảng hai mươi phút hoặc đi taxi.",
-      "Ben Thanh Market is one of the symbols of Ho Chi Minh City. The current building opened in 1914 and is known for the clock tower over its main gate. It sells souvenirs, fabrics and local specialties, and has many food stalls. From Independence Palace you can walk about twenty minutes or take a taxi.",
-      "滨城市场是胡志明市的象征之一。现有建筑于1914年落成，正门上方的钟楼十分醒目。市场出售纪念品、布料和各地特产，还有许多小吃摊。从独立宫步行约二十分钟，也可以乘出租车前往。",
-      "ベンタイン市場はホーチミン市を象徴する場所のひとつです。現在の建物は1914年に開業し、正門の時計塔が目印です。お土産、布地、名物を売る店や多くの屋台があります。独立宮殿から徒歩約20分、タクシーでも行けます。",
-      "벤탄 시장은 호찌민시의 상징 중 하나입니다. 현재 건물은 1914년에 개장했으며 정문 위의 시계탑이 눈에 띕니다. 기념품, 직물, 특산품을 팔고 음식 노점도 많습니다. 독립궁에서 도보로 약 20분이며 택시로도 갈 수 있습니다."
     )
   }
 ];

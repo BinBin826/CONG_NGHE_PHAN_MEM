@@ -52,21 +52,9 @@ describe("Thuyết minh Dinh Độc Lập (web)", () => {
     expect(screen.queryByText("Phòng Quốc thư")).not.toBeInTheDocument();
   });
 
-  it("chuyển sang tab địa danh lân cận và đọc nội dung", () => {
-    render(<App />);
-    fireEvent.click(screen.getByRole("tab", { name: "Địa danh lân cận" }));
-    expect(screen.getAllByText("Nhà thờ Đức Bà Sài Gòn").length).toBeGreaterThan(0);
-    expect(screen.queryByText("Hầm chỉ huy")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Nghe" }));
-    expect(speak.mock.calls[0][0].text).toContain("1863");
-  });
-
-    it("hiện ảnh minh họa và bản đồ cho điểm trong Dinh, chỉ hiện ghi chú cho địa danh lân cận", () => {
+    it("hiện ảnh minh họa và bản đồ cho điểm tham quan", () => {
     render(<App />);
     expect(screen.getByRole("img", { name: "Cổng chính & xe tăng" })).toBeInTheDocument();
     expect(screen.getByTestId("map")).toHaveAttribute("data-active", "gate");
-    fireEvent.click(screen.getByRole("tab", { name: "Địa danh lân cận" }));
-    expect(screen.queryByTestId("map")).not.toBeInTheDocument();
-    expect(screen.getByRole("note")).toBeInTheDocument();
   });
 });

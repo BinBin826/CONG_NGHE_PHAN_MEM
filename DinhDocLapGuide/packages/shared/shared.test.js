@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { LANGUAGES, ui, stops, stopsByCategory, getCoords, mapPoints, mapsUrl, walkingUrl, PALACE_COORDS, detectLang, estimateSeconds, getNextStop, pickVoice, searchStops, speechLang } from "./index.js";
+import { LANGUAGES, ui, stops, stopsByCategory, detectLang, estimateSeconds, getNextStop, pickVoice, searchStops, speechLang } from "./index.js";
 
 describe("dữ liệu đa ngôn ngữ", () => {
   it("mọi điểm có đủ tiêu đề, vị trí và nội dung cho mọi ngôn ngữ", () => {
@@ -43,27 +43,9 @@ describe("helper", () => {
   it("getNextStop không vượt ranh giới nhóm", () => {
     const lastPalace = stopsByCategory("palace").at(-1);
     expect(getNextStop(lastPalace.id, 1)).toBeNull();
-    expect(getNextStop(stopsByCategory("nearby")[0].id, -1)).toBeNull();
   });
   it("id duy nhất và mô tả ngắn không rỗng", () => {
     expect(new Set(stops.map((s) => s.id)).size).toBe(stops.length);
     expect(stopsByCategory("palace").length).toBeGreaterThanOrEqual(15);
-    expect(stopsByCategory("nearby").length).toBeGreaterThanOrEqual(5);
-  });
-  it("toạ độ: điểm trong Dinh dùng toạ độ Dinh, địa danh lân cận có toạ độ riêng", () => {
-    const inside = stops.find((s) => s.id === "bunker");
-    expect(getCoords(inside)).toEqual(PALACE_COORDS);
-    for (const s of stopsByCategory("nearby")) {
-      const c = getCoords(s);
-      expect(c).not.toEqual(PALACE_COORDS);
-      expect(c.lat).toBeGreaterThan(10.7); expect(c.lat).toBeLessThan(10.85);   // quanh Quận 1
-      expect(c.lng).toBeGreaterThan(106.65); expect(c.lng).toBeLessThan(106.75);
-    }
-    expect(mapPoints()).toHaveLength(6);
-  });
-  it("liên kết bản đồ", () => {
-    const n = stopsByCategory("nearby")[0];
-    expect(mapsUrl(n)).toContain("google.com/maps");
-    expect(walkingUrl(n)).toContain("travelmode=walking");
   });
 });
