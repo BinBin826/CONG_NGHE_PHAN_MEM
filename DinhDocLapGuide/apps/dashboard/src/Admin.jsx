@@ -9,7 +9,9 @@ import "./admin.css";
 const blankLocalized = () => Object.fromEntries(LANGUAGES.map((l) => [l.code, ""]));
 const emptyStop = () => ({ id: `place-${Date.now()}`, icon: "📍", category: "palace", order: 999, floor: blankLocalized(), title: blankLocalized(), summary: blankLocalized(), text: blankLocalized(), image_url: null, latitude: null, longitude: null });
 const clone = (v) => JSON.parse(JSON.stringify(v));
-
+// Đường dẫn quay về trang người dùng
+const WEBSITE_URL =
+  import.meta.env.VITE_WEBSITE_URL || "http://localhost:5173";
 function AdminApp() {
   const [session, setSession] = useState(null);
   const [authReady, setAuthReady] = useState(false);
@@ -224,11 +226,11 @@ function AdminApp() {
   };
 
   if (!authReady) return <div className="login-page"><div className="login-card"><div className="seal">✦</div><h1>Đang kiểm tra phiên đăng nhập…</h1></div></div>;
-  if (!session) return <div className="login-page"><div className="login-card"><div className="seal">✦</div><p className="overline">DINH DOC LAP GUIDE</p><h1>Đăng nhập quản trị</h1><p className="muted">Đăng nhập bằng tài khoản Admin đã tạo trong Supabase Auth.</p>{!isSupabaseConfigured && <p className="error">Chưa cấu hình Supabase. Sao chép .env.example thành .env ở thư mục gốc và điền URL + anon key.</p>}<form onSubmit={login}><label>Email quản trị<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username" placeholder="admin@example.com" required /></label><label>Mật khẩu<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" placeholder="Mật khẩu Supabase Auth" required /></label>{error && <p className="error">{error}</p>}<button className="primary wide" disabled={busy || !isSupabaseConfigured}>{busy ? "Đang đăng nhập…" : "Đăng nhập →"}</button></form><div className="demo-note"><b>Bảo mật</b><p>Không còn tài khoản/mật khẩu demo cố định. Tạo duy nhất tài khoản quản trị trong Supabase Auth và tắt đăng ký công khai.</p></div><a className="back-link" href="/">← Quay lại trang tham quan</a></div></div>;
+  if (!session) return <div className="login-page"><div className="login-card"><div className="seal">✦</div><p className="overline">DINH DOC LAP GUIDE</p><h1>Đăng nhập quản trị</h1><p className="muted">Đăng nhập bằng tài khoản Admin đã tạo trong Supabase Auth.</p>{!isSupabaseConfigured && <p className="error">Chưa cấu hình Supabase. Sao chép .env.example thành .env ở thư mục gốc và điền URL + anon key.</p>}<form onSubmit={login}><label>Email quản trị<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username" placeholder="admin@example.com" required /></label><label>Mật khẩu<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" placeholder="Mật khẩu Supabase Auth" required /></label>{error && <p className="error">{error}</p>}<button className="primary wide" disabled={busy || !isSupabaseConfigured}>{busy ? "Đang đăng nhập…" : "Đăng nhập →"}</button></form><div className="demo-note"><b>Bảo mật</b><p>Không còn tài khoản/mật khẩu demo cố định. Tạo duy nhất tài khoản quản trị trong Supabase Auth và tắt đăng ký công khai.</p></div><a className="back-link" href={WEBSITE_URL}>← Quay lại trang tham quan</a></div></div>;
 
   return <div className="admin-layout">
     <aside className="sidebar">
-      <a className="admin-brand" href="/"><span className="brand-symbol">✦</span><span><b>Dinh Độc Lập</b><small>ADMIN CONSOLE</small></span></a>
+     <a className="admin-brand" href={WEBSITE_URL}><span className="brand-symbol">✦</span><span><b>Dinh Độc Lập</b><small>ADMIN CONSOLE</small></span></a>
       <div className="sidebar-nav">
         <div className="side-label">QUẢN LÝ</div>
         <a className={`side-item ${adminPage === "overview" ? "active" : ""}`} href="#overview" onClick={() => setAdminPage("overview")}><span className="side-icon">▦</span><span>Tổng quan</span></a>
@@ -242,7 +244,7 @@ function AdminApp() {
       </div>
       <div className="sidebar-bottom"><div className="avatar">AD</div><div className="sidebar-user"><b>Quản trị viên</b><small>{session.user?.email}</small></div><button title="Đăng xuất" onClick={logout}>↪</button></div>
     </aside>
-    <main className="admin-main"><header className="admin-topbar"><div><p className="overline">BẢNG ĐIỀU KHIỂN</p><h1>Quản trị nội dung</h1><p className="muted">Dữ liệu được lưu trên Supabase và dùng chung cho web + mobile.</p></div><div className="top-actions"><a className="outline" href="/" target="_blank" rel="noreferrer">↗ Xem website</a><button className="primary" onClick={openNew}>＋ Thêm địa điểm</button></div></header>
+    <main className="admin-main"><header className="admin-topbar"><div><p className="overline">BẢNG ĐIỀU KHIỂN</p><h1>Quản trị nội dung</h1><p className="muted">Dữ liệu được lưu trên Supabase và dùng chung cho web + mobile.</p></div><div className="top-actions"><a className="outline" href={WEBSITE_URL} target="_blank" rel="noreferrer">↗ Xem website</a><button className="primary" onClick={openNew}>＋ Thêm địa điểm</button></div></header>
     {notice && <div className="toast" role="status">{notice}</div>}
     <section className={`stats ${["settings", "account"].includes(adminPage) ? "page-hidden" : ""}`} id="overview"><div className="stat-card"><span className="stat-icon burgundy">⌖</span><div><small>Tổng địa điểm</small><strong>{items.length}</strong><em>Trực tuyến</em></div></div><div className="stat-card"><span className="stat-icon gold">文</span><div><small>Ngôn ngữ hỗ trợ</small><strong>05</strong><em>VI · EN · ZH · JA · KO</em></div></div><div className="stat-card"><span className="stat-icon green">✓</span><div><small>Có nội dung tiếng Việt</small><strong>{items.filter((x) => x.title?.vi?.trim() && x.text?.vi?.trim()).length}</strong><em>Tiêu đề và thuyết minh</em></div></div></section>
     <section className={`content-card ${["settings", "account"].includes(adminPage) || !settings.showAnalytics ? "page-hidden" : ""}`} id="analytics-dashboard">
