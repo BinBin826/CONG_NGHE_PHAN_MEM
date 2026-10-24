@@ -6,6 +6,7 @@ import {
 import { useSpeech } from "./useSpeech.js";
 import { imageFor } from "./images.js";
 import MapView from "./MapView.jsx";
+const DASHBOARD_URL = import.meta.env.VITE_DASHBOARD_URL || (import.meta.env.DEV ? "http://localhost:5174" : "");
 import { syncContent, logListen } from "./remote.js";
 
 const LANG_KEY = "palaceguide_lang";
@@ -87,6 +88,11 @@ export default function App() {
             </button>
           ))}
         </div>
+         {DASHBOARD_URL && (
+          <a className="lang staff-link" href={DASHBOARD_URL} target="_blank" rel="noopener noreferrer">
+             Quản lý
+          </a>
+        )}
       </header>
 
       <section className="hero">

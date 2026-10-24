@@ -37,3 +37,5 @@ textarea { resize:vertical; line-height:1.55; }
 .bars b { text-align:right; }
 @media (max-width:760px) { .split { grid-template-columns:1fr; } .shell > main { padding:16px; } }
 @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+.shell > header a.back{color:var(--white);text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:8px 14px}
+.back-link{display:block;margin-top:14px;text-align:center;color:var(--red);font-weight:600;text-decoration:none}

@@ -3,6 +3,7 @@ import { supabase, configured } from "./supabase.js";
 
 const LANGS = [["vi", "Tiếng Việt"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["ko", "한국어"]];
 const ROLE = { admin: "Quản trị", editor: "Biên tập", viewer: "Xem thống kê" };
+const WEB_URL = import.meta.env.VITE_WEB_URL || (import.meta.env.DEV ? "http://localhost:5173" : "");
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ function Login() {
         <label>Mật khẩu<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" /></label>
         {err && <p className="err" role="alert">{err}</p>}
         <button className="primary" disabled={busy}>{busy ? "Đang đăng nhập…" : "Đăng nhập"}</button>
+        {WEB_URL && <a className="back-link" href={WEB_URL}>← Về trang web</a>}
       </form>
     </main>
   );
@@ -178,6 +180,7 @@ export default function App() {
     <div className="shell">
       <header>
         <strong>Dinh Độc Lập</strong>
+         {WEB_URL && <a className="back" href={WEB_URL}>← Về trang web</a>}
         <nav>
           {canEdit && <button className={view === "content" ? "on" : ""} onClick={() => setTab("content")}>Nội dung</button>}
           <button className={view === "stats" ? "on" : ""} onClick={() => setTab("stats")}>Thống kê</button>
