@@ -9,6 +9,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
     "@palaceguide/shared": "1.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "react": "^19.2.0",

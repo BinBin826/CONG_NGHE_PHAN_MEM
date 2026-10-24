@@ -116,13 +116,14 @@ function Stats() {
     });
   }, []);
   const agg = useMemo(() => {
-    const count = (key) => Object.entries((rows || []).reduce((m, r) => ({ ...m, [r[key]]: (m[r[key]] || 0) + 1 }), {})).sort((a, b) => b[1] - a[1]);
-    return { stop: count("stop_id"), lang: count("lang"), done: (rows || []).filter((r) => r.completed).length };
+    const starts = (rows || []).filter((r) => !r.completed);
+    const count = (key) => Object.entries(starts.reduce((m, r) => ({ ...m, [r[key]]: (m[r[key]] || 0) + 1 }), {})).sort((a, b) => b[1] - a[1]);
+    return { starts: starts.length, stop: count("stop_id"), lang: count("lang"), done: (rows || []).length - starts.length };
   }, [rows]);
 
   if (err) return <p className="err" role="alert">Không tải được thống kê: {err}</p>;
   if (!rows) return <p className="empty">Đang tải…</p>;
-  if (!rows.length) return <p className="empty">Chưa có lượt nghe nào trong 30 ngày qua. Số liệu sẽ xuất hiện khi app ghi sự kiện nghe vào bảng listen_events.</p>;
+  if (!agg.starts) return <p className="empty">Chưa có lượt nghe nào trong 30 ngày qua. Số liệu sẽ xuất hiện khi app ghi sự kiện nghe vào bảng listen_events.</p>;
   const Bars = ({ data, label }) => (
     <ul className="bars">
       {data.map(([k, n]) => (
@@ -132,7 +133,7 @@ function Stats() {
   );
   return (
     <div className="stats">
-      <p className="lead"><b>{rows.length}</b> lượt nghe trong 30 ngày, <b>{Math.round((agg.done / rows.length) * 100)}%</b> nghe hết bài.</p>
+      <p className="lead"><b>{agg.starts}</b> lượt nghe trong 30 ngày, <b>{Math.min(100, Math.round((agg.done / agg.starts) * 100))}%</b> nghe hết bài.</p>
       <h2>Điểm được nghe nhiều nhất</h2>
       <Bars data={agg.stop.slice(0, 10)} label={(k) => titles[k] || k} />
       <h2>Theo ngôn ngữ</h2>

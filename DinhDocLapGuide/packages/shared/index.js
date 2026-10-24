@@ -189,11 +189,26 @@ const TOUR_ORDER = [
   "family", "rooftop", "bunker", "garden", "vehicles", "exhibition", "reunification"
 ];
 
-// Danh sách đầy đủ, đã gắn mô tả ngắn và số thứ tự (order liên tục từ 1)
-export const stops = TOUR_ORDER.map((id, i) => {
+const allStops = TOUR_ORDER.map((id, i) => {
   const stop = byId[id];
   return { ...stop, order: i + 1, summary: stop.summary || summaries[id] };
 });
+export const stops = [...allStops];
+
+// Ghi đè nội dung bằng dữ liệu tải từ Supabase (do dashboard sửa). Có thể gọi nhiều lần.
+const REMOTE_FIELDS = { title: "title", floor: "floor", summary: "summary", body: "text" };
+export const applyRemoteContent = (stopRows = [], translationRows = []) => {
+  for (const r of translationRows) {
+    const s = allStops.find((x) => x.id === r.stop_id);
+    if (!s || !isSupportedLang(r.lang)) continue;
+    for (const [col, field] of Object.entries(REMOTE_FIELDS)) if (r[col]) s[field][r.lang] = r[col];
+  }
+  const hidden = new Set(stopRows.filter((r) => r.published === false).map((r) => r.id));
+  const visible = allStops.filter((s) => !hidden.has(s.id));
+  if (!visible.length) return;
+  visible.forEach((s, i) => { s.order = i + 1; });
+  stops.splice(0, stops.length, ...visible);
+};
 
 // ---- Helpers ----
 export const isSupportedLang = (code) => LANGUAGES.some((l) => l.code === code);

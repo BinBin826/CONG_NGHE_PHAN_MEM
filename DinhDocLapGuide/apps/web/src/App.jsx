@@ -6,6 +6,7 @@ import {
 import { useSpeech } from "./useSpeech.js";
 import { imageFor } from "./images.js";
 import MapView from "./MapView.jsx";
+import { syncContent, logListen } from "./remote.js";
 
 const LANG_KEY = "palaceguide_lang";
 const readLang = () => {
@@ -22,22 +23,26 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [rate, setRate] = useState(1);
   const [autoNext, setAutoNext] = useState(false);
+  const [version, setVersion] = useState(0);
   const speech = useSpeech();
 
-  const active = stops.find((s) => s.id === activeId);
-  const list = useMemo(() => searchStops(query, lang), [query, lang]);
+  const active = stops.find((s) => s.id === activeId) || stops[0];
+  const list = useMemo(() => searchStops(query, lang), [query, lang, version]);
   const group = stopsByCategory(active.category);
   const posOf = (s) => stopsByCategory(s.category).findIndex((x) => x.id === s.id) + 1;
   const text = localized(active, "text", lang);
 
+  useEffect(() => { syncContent().then((ok) => ok && setVersion((v) => v + 1)); }, [])
   useEffect(() => {
     document.documentElement.lang = lang;
     try { localStorage.setItem(LANG_KEY, lang); } catch { /* bỏ qua */ }
   }, [lang]);
 
-  const play = (stop = active, opts = {}) => {
+    const play = (stop = active, opts = {}) => {
     const body = localized(stop, "text", lang);
+    logListen(stop.id, lang, false);
     speech.speak(body, lang, rate, () => {
+      logListen(stop.id, lang, true);
       if (opts.chain) {
         const next = getNextStop(stop.id, 1);
         if (next) { setActiveId(next.id); play(next, { chain: true }); }

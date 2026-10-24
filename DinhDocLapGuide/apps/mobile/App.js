@@ -8,6 +8,7 @@ import Svg, {
   Path, G, Circle, Line, Polygon, Polyline
 } from "react-native-svg";
 import { imageFor } from "./images";
+import { syncContent, logListen } from "./remote";
 import {
   LANGUAGES, stops, t, localized, detectLang, speechLang, estimateSeconds, formatMinutes, getNextStop, searchStops, stopsByCategory,
   PALACE_MAP_POSITIONS
@@ -122,27 +123,31 @@ export default function App() {
   const [rate, setRate] = useState(1);
   const [playing, setPlaying] = useState(false);
   const token = useRef(0);
+  const [version, setVersion] = useState(0);
 
-  const active = stops.find((s) => s.id === activeId);
-  const list = useMemo(() => searchStops(query, lang), [query, lang]);
+  const active = stops.find((s) => s.id === activeId) || stops[0];
+  const list = useMemo(() => searchStops(query, lang), [query, lang, version]);
   const group = stopsByCategory(active.category);
   const posOf = (st) => stopsByCategory(st.category).findIndex((x) => x.id === st.id) + 1;
   const text = localized(active, "text", lang);
 
   useEffect(() => () => { Speech.stop(); }, []);
+  useEffect(() => { syncContent().then((ok) => ok && setVersion((v) => v + 1)); }, []);
 
   const stop = () => { token.current += 1; Speech.stop(); setPlaying(false); };
 
-  const play = (target = active, chain = false) => {
+    const play = (target = active, chain = false) => {
     token.current += 1;
     const mine = token.current;
     Speech.stop();
     setPlaying(true);
+    logListen(target.id, lang, false);
     Speech.speak(localized(target, "text", lang), {
       language: speechLang(lang),
       rate,
       onDone: () => {
         if (token.current !== mine) return;
+        logListen(target.id, lang, true);
         const next = chain ? getNextStop(target.id, 1) : null;
         if (next) { setActiveId(next.id); play(next, true); } else setPlaying(false);
       },
@@ -214,7 +219,7 @@ export default function App() {
           <Text style={s.h3}>{t(lang, "transcript")}</Text>
           <Text style={s.transcript}>{text}</Text>
          <Text style={[s.h3, { marginTop: 22 }]}>{t(lang, "map")}</Text>
-         <StopMap lang={lang} active={active} onSelect={(id) => { stop(); setActiveId(id); }} onPlay={(st) => play(st, false)}/>
+         <StopMap key={version} lang={lang} active={active} onSelect={(id) => { stop(); setActiveId(id); }} onPlay={(st) => play(st, false)}/>
         </ScrollView>
       )}
 
