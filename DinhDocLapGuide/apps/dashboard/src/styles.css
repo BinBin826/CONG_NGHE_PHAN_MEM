@@ -1,41 +1,51 @@
-:root { --ink:#2a1d1a; --red:#7b1f20; --gold:#c9a24a; --paper:#faf6ee; --line:#e4d9c6; --white:#fff; }
-* { box-sizing: border-box; }
-body { margin:0; font-family:"Be Vietnam Pro",system-ui,sans-serif; color:var(--ink); background:var(--paper); line-height:1.5; }
-button, input, textarea { font:inherit; color:inherit; }
-button { cursor:pointer; border:1px solid var(--line); background:var(--white); border-radius:8px; padding:8px 14px; }
-button:focus-visible, input:focus-visible, textarea:focus-visible { outline:3px solid var(--gold); outline-offset:1px; }
-button.primary { background:var(--red); border-color:var(--red); color:var(--white); font-weight:600; }
-button:disabled { opacity:.6; cursor:default; }
-label { display:grid; gap:4px; margin-bottom:14px; font-weight:600; font-size:14px; }
-input, textarea { width:100%; border:1px solid var(--line); border-radius:8px; padding:9px 11px; background:var(--white); font-weight:400; }
-textarea { resize:vertical; line-height:1.55; }
-.gate { min-height:100vh; display:grid; place-items:center; padding:20px; }
-.gate form, .gate > div { width:min(400px,100%); background:var(--white); border:1px solid var(--line); border-top:6px solid var(--red); border-radius:12px; padding:28px; }
-.gate h1 { font-size:22px; margin:0 0 6px; } .gate p { margin:0 0 18px; color:#6b5d55; }
-.err { color:#a4161a; font-weight:600; }
-.empty { padding:40px 20px; text-align:center; color:#6b5d55; }
-.shell > header { display:flex; align-items:center; gap:16px; padding:10px 24px; background:var(--red); color:var(--white); flex-wrap:wrap; }
-.shell > header nav { display:flex; gap:6px; margin-right:auto; }
-.shell > header button { background:transparent; color:var(--white); border-color:rgba(255,255,255,.35); }
-.shell > header button.on { background:var(--gold); border-color:var(--gold); color:var(--ink); font-weight:600; }
-.who { font-size:14px; opacity:.9; }
-.shell > main { max-width:1100px; margin:0 auto; padding:24px; }
-.split { display:grid; grid-template-columns:280px 1fr; gap:24px; align-items:start; }
-.list { list-style:none; margin:0; padding:0; border:1px solid var(--line); border-radius:12px; background:var(--white); overflow:hidden; }
-.list button { width:100%; text-align:left; border:0; border-bottom:1px solid var(--line); border-radius:0; display:flex; justify-content:space-between; gap:8px; }
-.list button.on { background:#f3e7cf; font-weight:600; box-shadow:inset 4px 0 var(--red); }
-.list small { color:#a4161a; }
-.editor { background:var(--white); border:1px solid var(--line); border-radius:12px; padding:20px; }
-.langs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
-.langs button.on { background:var(--ink); color:var(--white); border-color:var(--ink); }
-.check { display:flex; align-items:center; gap:8px; } .check input { width:auto; }
-.bar { display:flex; align-items:center; gap:14px; }
-.stats h2 { font-size:16px; margin:28px 0 10px; } .lead { font-size:18px; }
-.bars { list-style:none; margin:0; padding:0; display:grid; gap:8px; }
-.bars li { display:grid; grid-template-columns:minmax(120px,240px) 1fr 48px; gap:12px; align-items:center; }
-.bars i { height:14px; background:var(--red); border-radius:3px; min-width:4px; }
-.bars b { text-align:right; }
-@media (max-width:760px) { .split { grid-template-columns:1fr; } .shell > main { padding:16px; } }
-@media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
-.shell > header a.back{color:var(--white);text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:8px 14px}
-.back-link{display:block;margin-top:14px;text-align:center;color:var(--red);font-weight:600;text-decoration:none}
+:root {
+  --ink: #2a1d1a;
+  --red: #7b1f20;
+  --red-d: #561212;
+  --gold: #c9a24a;
+  --gold-light: #f3e7cf;
+  --paper: #faf6ee;
+  --line: #e4d9c6;
+  --muted: #7d6e66;
+  --white: #ffffff;
+  --green: #2f7657;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.5;
+}
+
+/* Custom Scrollbar theo phong cách màu sắc của file zip */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--paper);
+}
+::-webkit-scrollbar-thumb {
+  background: #d5c6b0;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Map Marker Animation từ file HTML */
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 0.3; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+.marker-pulse {
+  animation: pulse-ring 2s infinite ease-in-out;
+}
