@@ -8,7 +8,7 @@ import Svg, {
   Path, G, Circle, Line, Polygon, Polyline
 } from "react-native-svg";
 import { imageFor } from "./images";
-import { syncContent, logListen } from "./remote";
+import { syncContent, logListen, logQrScan } from "./remote";
 import {
   LANGUAGES, stops, t, localized, detectLang, speechLang, estimateSeconds, formatMinutes, getNextStop, searchStops, stopsByCategory,
   PALACE_MAP_POSITIONS
@@ -132,7 +132,17 @@ export default function App() {
   const text = localized(active, "text", lang);
 
   useEffect(() => () => { Speech.stop(); }, []);
-  useEffect(() => { syncContent().then((ok) => ok && setVersion((v) => v + 1)); }, []);
+   useEffect(() => {
+    if (Platform.OS === "web" && typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("src") === "qr") {
+        let first = true;
+        try { first = !window.sessionStorage.getItem("palaceguide_qr"); window.sessionStorage.setItem("palaceguide_qr", "1"); } catch { /* bỏ qua */ }
+        if (first) logQrScan(params.get("place"), lang);
+      }
+    }
+    syncContent().then((ok) => ok && setVersion((v) => v + 1));
+  }, []);
 
   const stop = () => { token.current += 1; Speech.stop(); setPlaying(false); };
 

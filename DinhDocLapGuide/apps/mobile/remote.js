@@ -36,3 +36,13 @@ export function logListen(placeId, lang, completed) {
     body: JSON.stringify({ event_type: completed ? "audio_complete" : "audio_play", place_id: placeId, language: lang })
   }).catch(() => {});
 }
+
+// Khách mở bản web của app từ mã QR (địa chỉ có ?src=qr). Ghi ẩn danh một lượt quét.
+export function logQrScan(placeId, lang) {
+  if (!BASE || !KEY) return;
+  fetch(`${BASE}/rest/v1/analytics_events`, {
+    method: "POST",
+    headers: { apikey: KEY, "Content-Type": "application/json", Prefer: "return=minimal" },
+    body: JSON.stringify({ event_type: "qr_scan", place_id: placeId || null, language: lang || null })
+  }).catch(() => {});
+}

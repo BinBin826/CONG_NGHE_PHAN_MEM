@@ -6,8 +6,9 @@ import {
 import { useSpeech } from "./useSpeech.js";
 import { imageFor } from "./images.js";
 import MapView from "./MapView.jsx";
+import QrButton from "./QrButton.jsx";
 const DASHBOARD_URL = import.meta.env.VITE_DASHBOARD_URL || (import.meta.env.DEV ? "http://localhost:5174" : "");
-import { syncContent, logListen } from "./remote.js";
+import { syncContent, logListen, logQrScan } from "./remote.js";
 
 const LANG_KEY = "palaceguide_lang";
 const readLang = () => {
@@ -33,7 +34,19 @@ export default function App() {
   const posOf = (s) => stopsByCategory(s.category).findIndex((x) => x.id === s.id) + 1;
   const text = localized(active, "text", lang);
 
-  useEffect(() => { syncContent().then((ok) => ok && setVersion((v) => v + 1)); }, [])
+    useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const target = params.get("place");
+    if (params.get("src") === "qr") {
+      let first = true;
+      try { first = !sessionStorage.getItem("palaceguide_qr"); sessionStorage.setItem("palaceguide_qr", "1"); } catch { /* bỏ qua */ }
+      if (first) logQrScan(target, lang);
+    }
+    syncContent().then((ok) => {
+      if (ok) setVersion((v) => v + 1);
+      if (target && stops.some((x) => x.id === target)) setActiveId(target);
+    });
+  }, []);
   useEffect(() => {
     document.documentElement.lang = lang;
     try { localStorage.setItem(LANG_KEY, lang); } catch { /* bỏ qua */ }
@@ -88,6 +101,7 @@ export default function App() {
             </button>
           ))}
         </div>
+         <QrButton />
          {DASHBOARD_URL && (
           <a className="lang staff-link" href={DASHBOARD_URL} target="_blank" rel="noopener noreferrer">
              Quản lý

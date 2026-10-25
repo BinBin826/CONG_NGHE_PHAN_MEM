@@ -65,7 +65,7 @@ function AdminApp() {
     if (!session || !supabase) return undefined;
     let alive = true;
     const loadAnalytics = async () => {
-      setAnalyticsStatus("loading");
+      setAnalyticsStatus((current) => (current === "ready" ? current : "loading"));
       const { data, error: analyticsError } = await supabase
         .from("analytics_events").select("event_type, place_id, language, created_at")
         .gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
@@ -81,7 +81,11 @@ function AdminApp() {
       setAnalyticsStatus("ready");
     };
     loadAnalytics();
-    return () => { alive = false; };
+    const channel = supabase.channel("admin-analytics")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "analytics_events" },
+        () => { if (alive) setAnalyticsRefreshKey((n) => n + 1); })
+      .subscribe();
+    return () => { alive = false; supabase.removeChannel(channel); };
   }, [session, analyticsRefreshKey]);
 
   const analyticsSummary = useMemo(() => {

@@ -4,16 +4,18 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "mobile:web": "npm --workspace apps/mobile run web",
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "test": "vitest run"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.45.0",
     "@palaceguide/shared": "1.0.0",
+    "@supabase/supabase-js": "^2.45.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "qrcode": "^1.5.4",
     "react": "^19.2.0",
-"react-dom": "^19.2.0",
+    "react-dom": "^19.2.0",
     "vite": "^6.0.5"
   },
   "devDependencies": {

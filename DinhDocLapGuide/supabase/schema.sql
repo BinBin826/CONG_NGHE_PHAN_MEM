@@ -87,6 +87,10 @@ do $$ begin
   alter publication supabase_realtime add table public.places;
 exception when duplicate_object then null;
 end $$;
+do $$ begin
+  alter publication supabase_realtime add table public.analytics_events;
+exception when duplicate_object then null;
+end $$;
 
 -- ===== Kho ảnh địa điểm (công khai để đọc, chỉ admin/editor được tải lên) =====
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
