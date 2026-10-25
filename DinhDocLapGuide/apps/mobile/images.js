@@ -1,3 +1,5 @@
+import { remoteImages } from "@palaceguide/shared";
+
 // Ảnh minh họa (Metro cần require tĩnh). Ghi đè file PNG trong packages/shared/images để dùng ảnh thật.
 export const images = {
   gate: require("@palaceguide/shared/images/gate.png"),
@@ -17,4 +19,5 @@ export const images = {
   exhibition: require("@palaceguide/shared/images/exhibition.png"),
 };
 
-export const imageFor = (id) => images[id] || null;
+// Ảnh tải lên từ dashboard được ưu tiên, nếu không có thì dùng ảnh trong code
+export const imageFor = (id) => (remoteImages[id] ? { uri: remoteImages[id] } : images[id] || null);

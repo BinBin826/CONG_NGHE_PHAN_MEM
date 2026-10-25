@@ -195,22 +195,34 @@ const allStops = TOUR_ORDER.map((id, i) => {
 });
 export const stops = [...allStops];
 
-// Ghi đè nội dung bằng dữ liệu tải từ Supabase (do dashboard sửa). Có thể gọi nhiều lần.
-const REMOTE_FIELDS = { title: "title", floor: "floor", summary: "summary", body: "text" };
-export const applyRemoteContent = (stopRows = [], translationRows = []) => {
-  for (const r of translationRows) {
-    const s = allStops.find((x) => x.id === r.stop_id);
-    if (!s || !isSupportedLang(r.lang)) continue;
-    for (const [col, field] of Object.entries(REMOTE_FIELDS)) if (r[col]) s[field][r.lang] = r[col];
-  }
-  const hidden = new Set(stopRows.filter((r) => r.published === false).map((r) => r.id));
-  const visible = allStops.filter((s) => !hidden.has(s.id));
-  if (!visible.length) return;
-  visible.forEach((s, i) => { s.order = i + 1; });
-  stops.splice(0, stops.length, ...visible);
+// Nội dung và ảnh do dashboard sửa (bảng places trên Supabase). Có thể gọi nhiều lần.
+// Có dữ liệu thì database là nguồn chính: điểm bị xóa sẽ ẩn, điểm mới được thêm vào;
+// ô nào để trống thì dùng lại nội dung gốc trong code.
+export const remoteImages = {};
+const PLACE_FIELDS = ["floor", "title", "summary", "text"];
+export const applyRemotePlaces = (rows) => {
+  if (!Array.isArray(rows) || !rows.length) return false;
+  const base = Object.fromEntries(allStops.map((s) => [s.id, s]));
+  const next = rows.filter((r) => r && r.id).map((r, i) => {
+    const b = base[r.id] || {};
+    const merged = {};
+    for (const f of PLACE_FIELDS) {
+      const fromDb = Object.fromEntries(
+        Object.entries(r[f] || {}).filter(([, v]) => typeof v === "string" && v.trim())
+      );
+      merged[f] = { ...(b[f] || {}), ...fromDb };
+    }
+    if (r.image_url) remoteImages[r.id] = r.image_url; else delete remoteImages[r.id];
+    return {
+      ...b, ...merged, id: r.id, icon: r.icon || b.icon || "\u{1F4CD}", category: "palace",
+      latitude: r.latitude ?? null, longitude: r.longitude ?? null, order: i + 1
+    };
+  });
+  if (!next.length) return false;
+  stops.splice(0, stops.length, ...next);
+  return true;
 };
 
-// ---- Helpers ----
 export const isSupportedLang = (code) => LANGUAGES.some((l) => l.code === code);
 export const normalizeLang = (code) => (isSupportedLang(code) ? code : DEFAULT_LANG);
 export const speechLang = (code) => (LANGUAGES.find((l) => l.code === code) || LANGUAGES[0]).speech;
@@ -236,7 +248,7 @@ export const formatMinutes = (seconds) => Math.max(1, Math.round(seconds / 60));
 
 export const stopsByCategory = (category) => stops.filter((s) => s.category === category);
 
-// Điểm trước/sau trong CÙNG nhóm (Trong Dinh / Lân cận); trả về null ở hai đầu
+// Điểm trước/sau trong danh sách tham quan; trả về null ở hai đầu
 export const getNextStop = (currentId, direction = 1) => {
   const current = stops.find((s) => s.id === currentId);
   if (!current) return stops[0];

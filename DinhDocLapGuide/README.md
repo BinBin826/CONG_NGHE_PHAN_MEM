@@ -4,7 +4,7 @@
 🇻🇳 Tiếng Việt · 🇬🇧 English · 🇨🇳 中文 · 🇯🇵 日本語 · 🇰🇷 한국어.
 
 Cấu trúc monorepo giống BookFlow: **React.js (web)** + **React Native / Expo (mobile)** + **package dùng chung** + **CI/CD GitHub Actions**.
-Chưa có backend: thuyết minh được **đọc bằng giọng nói của thiết bị** (Web Speech API trên web, `expo-speech` trên mobile).
+Nội dung lấy từ **Supabase** (có bản dự phòng trong code); thuyết minh được **đọc bằng giọng nói của thiết bị** (Web Speech API trên web, `expo-speech` trên mobile).
 
 ## Chức năng
 
@@ -22,13 +22,29 @@ Chưa có backend: thuyết minh được **đọc bằng giọng nói của thi
 DinhDocLapGuide/
 ├── apps/
 │   ├── web/            # React + Vite (Web Speech API)
-│   └── mobile/         # React Native + Expo (expo-speech, react-native-svg)
+│   ├── mobile/         # React Native + Expo (expo-speech, react-native-svg)
+│   └── dashboard/      # Trang quản trị (React + Vite + Supabase)
 ├── packages/shared/    # Dữ liệu 5 ngôn ngữ, chuỗi UI, helper, unit test
 ├── .github/workflows/
 │   ├── ci.yml          # test + build web + export mobile
 │   └── deploy-web.yml  # CD: deploy web lên GitHub Pages
+├── supabase/           # schema.sql (bảng + phân quyền), seed.sql (dữ liệu mẫu)
 └── package.json
 ```
+
+## Thiết lập Supabase
+
+1. Tạo project trên supabase.com. Vào Authentication → Sign In / Providers, tắt "Allow new users to sign up".
+2. Mở SQL Editor, chạy `supabase/schema.sql` rồi `supabase/seed.sql`.
+3. Tạo tài khoản ở Authentication → Users (Add user, tick Auto Confirm User), rồi gán vai trò trong SQL Editor:
+   ```sql
+   update public.profiles set role = 'admin'
+   where id = (select id from auth.users where email = 'email-cua-ban');
+   ```
+   Chỉ vai trò `admin` và `editor` vào được dashboard.
+4. Tạo file `.env` cho từng app theo `.env.example` (web và dashboard dùng `VITE_...`, mobile dùng `EXPO_PUBLIC_...`). Không đưa khóa `secret` hay `service_role` vào các file này.
+5. Chạy lại ứng dụng. Sửa nội dung trong dashboard thì web và mobile nhận bản mới khi tải lại.
+
 
 ## Chạy
 
