@@ -137,7 +137,7 @@ export default function App() {
           <h3>{t(lang, "transcript")}</h3>
           <p className="transcript" lang={lang}>{text}</p>
          <h3 className="map-h">{t(lang, "map")}</h3>
-         <MapView lang={lang} activeId={activeId} onSelect={(id) => select(id)} onPlay={(st) => play(st, { chain: autoNext })} />
+         <MapView key={version} lang={lang} activeId={activeId} onSelect={(id) => select(id)} onPlay={(st) => play(st, { chain: autoNext })} />
         </article>
       </main>
 
