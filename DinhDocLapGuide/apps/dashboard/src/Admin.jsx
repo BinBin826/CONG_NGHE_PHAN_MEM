@@ -93,16 +93,19 @@ function AdminApp() {
     const qr = analyticsRows.filter((e) => e.event_type === "qr_scan");
     const languages = audio.reduce((m, e) => { const k = e.language || "vi"; m[k] = (m[k] || 0) + 1; return m; }, {});
     const places = audio.reduce((m, e) => { if (e.place_id) m[e.place_id] = (m[e.place_id] || 0) + 1; return m; }, {});
+    const dayKey = (t) => `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
+    const countByDay = (rows) => rows.reduce((m, e) => { if (e.created_at) { const k = dayKey(new Date(e.created_at)); m[k] = (m[k] || 0) + 1; } return m; }, {});
+    const audioByDay = countByDay(audio);
+    const qrByDay = countByDay(qr);
     const days = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - (6 - i));
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      return { key, label: d.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" }),
-        count: audio.filter((e) => { if (!e.created_at) return false; const t = new Date(e.created_at); const eventKey = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`; return eventKey === key; }).length };
+      const key = dayKey(d);
+      return { key, label: d.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" }), count: audioByDay[key] || 0, qr: qrByDay[key] || 0, isToday: i === 6 };
     });
     const langNames = { vi: "Tiếng Việt", en: "Tiếng Anh", zh: "Tiếng Trung", ja: "Tiếng Nhật", ko: "Tiếng Hàn", fr: "Tiếng Pháp" };
     const popularLanguage = Object.entries(languages).sort((a,b) => b[1]-a[1])[0];
     const topPlace = Object.entries(places).sort((a,b) => b[1]-a[1])[0];
-    return { audio: audio.length, qr: qr.length,
+    return { audio: audio.length, qr: qr.length, qrToday: days[days.length - 1].qr,
       popularLanguage: popularLanguage ? `${langNames[popularLanguage[0]] || popularLanguage[0]} (${popularLanguage[1]})` : "Chưa có dữ liệu",
       topPlace: topPlace ? `${localized(items.find((x) => x.id === topPlace[0]) || { title: {} }, "title", "vi") || topPlace[0]} (${topPlace[1]})` : "Chưa có dữ liệu", days };
   }, [analyticsRows, items]);
@@ -269,12 +272,15 @@ function AdminApp() {
       {analyticsStatus === "error" ? <div className="analytics-notice"><b>Không đọc được thống kê</b><p>Kiểm tra quyền SELECT của Admin trong RLS và email được khai báo trong migration SQL.</p></div> : null}
       <div className="stats analytics-stats">
         <div className="stat-card"><span className="stat-icon burgundy">▶</span><div><small>Lượt bắt đầu phát âm thanh</small><strong>{analyticsStatus === "ready" ? analyticsSummary.audio : "—"}</strong><em>30 ngày gần nhất</em></div></div>
-        <div className="stat-card"><span className="stat-icon gold">▦</span><div><small>Lượt mở từ mã QR</small><strong>{analyticsStatus === "ready" ? analyticsSummary.qr : "—"}</strong><em>QR cần dẫn tới URL có ?qr=ID</em></div></div>
+        <div className="stat-card"><span className="stat-icon gold">▦</span><div><small>Lượt mở từ mã QR</small><strong>{analyticsStatus === "ready" ? analyticsSummary.qr : "—"}</strong><em>Hôm nay: {analyticsStatus === "ready" ? analyticsSummary.qrToday : "—"} lượt</em></div></div>
         <div className="stat-card"><span className="stat-icon green">文</span><div><small>Ngôn ngữ được nghe nhiều nhất</small><strong className="analytics-text-value">{analyticsStatus === "ready" ? analyticsSummary.popularLanguage : "—"}</strong><em>Tính từ lượt phát âm thanh</em></div></div>
       </div>
       <div className="analytics-grid">
         <div className="analytics-panel analytics-line-panel"><h3>Lượt phát theo ngày</h3><p>7 ngày gần nhất · dữ liệu thực từ Supabase</p><div className="analytics-line-chart"><svg viewBox="0 0 920 270" role="img" aria-label="Biểu đồ lượt phát thuyết minh theo ngày" preserveAspectRatio="none"><defs><linearGradient id="analyticsArea" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor="#8a3434" stopOpacity=".14"/><stop offset="100%" stopColor="#8a3434" stopOpacity=".02"/></linearGradient></defs>{[40,84,128,172,218].map((y) => <g key={y}><line x1="54" y1={y} x2="866" y2={y} className="chart-grid-line"/><text x="42" y={y + 4} textAnchor="end" className="chart-axis-label">{Math.round((218-y)/178*chartMax)}</text></g>)}<path d={chartArea} fill="url(#analyticsArea)"/><path d={chartLine} className="chart-line" fill="none" strokeLinecap="round" strokeLinejoin="round"/>{chartPoints.map((point) => <g key={point.key}><circle cx={point.x} cy={point.y} r="5" className="chart-point"/><text x={point.x} y={Math.max(22, point.y - 13)} textAnchor="middle" className="chart-value">{point.count}</text><text x={point.x} y="248" textAnchor="middle" className="chart-axis-label">{point.label}</text></g>)}</svg></div></div>
         <div className="analytics-panel"><h3>Địa điểm được nghe nhiều nhất</h3><p>Trong 30 ngày gần nhất</p><strong className="analytics-top-place">{analyticsStatus === "ready" ? analyticsSummary.topPlace : "—"}</strong><div className="analytics-footnote">{analyticsStatus === "ready" && analyticsRows.length === 0 ? "Chưa có sự kiện mới được ghi nhận." : "Số liệu tổng hợp, không theo dõi từng khách."}</div></div>
+        <div className="analytics-panel analytics-qr-panel"><h3>Lượt quét QR theo ngày</h3><p>7 ngày gần nhất · tự cập nhật khi có người quét</p>
+          <div className="qr-day-list">{[...analyticsSummary.days].reverse().map((d) => <div key={d.key} className={`qr-day-row ${d.isToday ? "today" : ""}`}><span className="qr-day-label">{d.isToday ? `Hôm nay (${d.label})` : d.label}</span><span className="qr-day-track"><i style={{ width: `${Math.max(d.qr ? 4 : 0, (d.qr / Math.max(1, ...analyticsSummary.days.map((x) => x.qr))) * 100)}%` }}/></span><b>{analyticsStatus === "ready" ? d.qr : "—"}</b></div>)}</div>
+        </div>
       </div>
       {analyticsStatus === "ready" && analyticsRows.length === 0 && <div className="analytics-empty">Chưa có dữ liệu lịch sử. Sự kiện sẽ bắt đầu được ghi nhận sau khi migration được cài và người dùng phát âm thanh hoặc mở liên kết QR hợp lệ.</div>}
     </section>
